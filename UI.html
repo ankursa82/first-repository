@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel = "stylesheet" type="text/css" href="UI.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <div class="relative top-20">
+    <h1 class="text-4xl font-bold underline text-center bg-blue-400">
+        Weather Dashboard
+    </h1>
+    <div class="w-72 absolute left-4 ">
+      <label for="place" class="font-bold text-2xl">Enter a City Name:</label><br/>
+      <input type="text" placeholder=" E.g. New York, London, Tokyo " id="places" class="border-2 w-72"><br/><br/>
+      <button onclick="handleClick()" class="w-72 border-2 bg-blue-600 text-center rounded-lg">Search</button><br/><br/>
+      <hr class="w-72"><p class="text-center">or</p><hr class="w-72"><br/>
+      <button onclick="handleClick2()" class="w-72 border-2 bg-gray-400 text-center rounded-lg">Use current location</button>
+    </div>
+    <div class="absolute left-80 p-4">
+       <div class="container1 bg-blue-600 border-2 w-auto h-44 rounded-lg"></div><br/><br/>
+       <p class="font-bold text-2xl">5-Day Forecast</p>
+       <div class="container2">
+       <div class="box box1"></div>
+       <div class="box box2"></div>
+       <div class="box box3"></div>
+       <div class="box box4"></div>
+       <div class="box box5"></div>
+       </div>
+    </div>
+    </div>
+<script>
+const cont1= document.querySelector(".container1");
+const bo1=document.querySelector(".box1");
+const bo2=document.querySelector(".box2");
+const bo3=document.querySelector(".box3");
+const bo4=document.querySelector(".box4");
+const bo5=document.querySelector(".box5");
+const handleClick=()=>{
+const Place=document.getElementById("places");        
+const API_KEY = 'e6bd47544657cbfdc696ff0731623a7d';
+const city = Place.value;
+
+
+async function getWeather(city) {
+  const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`;
+
+  const currentRes = await fetch(currentUrl);
+  const currentData = await currentRes.json();
+
+  const forecastRes = await fetch(forecastUrl);
+  const forecastData = await forecastRes.json();
+ 
+  cont1.innerHTML=`<p>Weather in city: ${city}</p><p>Description: ${currentData.weather[0].description}</p> <p>Temperature:${currentData.main.temp}°C</p><p>humidity:${currentData.main.humidity}</p>
+  <p>wind: ${currentData.wind.speed}m/s</p><p> Date:${new Date()}</p>`;
+  bo1.innerHTML=`<h1>${forecastData.list[6].dt_txt}</h1><p>Description:${forecastData.list[6].weather[0].description}</p><p>Temp:${forecastData.list[6].main.temp}°C</p><p>wind:${forecastData.list[6].wind.speed}m/s</p><p>humidity:${forecastData.list[6].clouds.all}</p>`;
+  bo2.innerHTML=`<h1>${forecastData.list[14].dt_txt}</h1><p>Description:${forecastData.list[14].weather[0].description}</p><p>Temp:${forecastData.list[14].main.temp}°C</p><p>wind:${forecastData.list[14].wind.speed}m/s</p><p>humidity:${forecastData.list[14].clouds.all}</p>`;
+  bo3.innerHTML=`<h1>${forecastData.list[22].dt_txt}</h1><p>Description:${forecastData.list[22].weather[0].description}</p><p>Temp:${forecastData.list[22].main.temp}°C</p><p>wind:${forecastData.list[22].wind.speed}m/s</p><p>humidity:${forecastData.list[22].clouds.all}</p>`;
+  bo4.innerHTML=`<h1>${forecastData.list[30].dt_txt}</h1><p>Description:${forecastData.list[30].weather[0].description}</p><p>Temp:${forecastData.list[30].main.temp}°C</p><p>wind:${forecastData.list[30].wind.speed}m/s</p><p>humidity:${forecastData.list[30].clouds.all}</p>`;
+  bo5.innerHTML=`<h1>${forecastData.list[38].dt_txt}</h1><p>Description:${forecastData.list[38].weather[0].description}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>wind:${forecastData.list[38].wind.speed}m/s</p><p>humidity:${forecastData.list[38].clouds.all}</p>`;
+  
+}
+
+getWeather(city);
+}
+const handleClick2=()=>{
+navigator.geolocation.getCurrentPosition(success, error);
+
+function success(position) {
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+  const apiKey = '72ba5614f8f943a4bca4c531a7581be7';
+  const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const city = data.results[0].components.city || data.results[0].components.town || data.results[0].components.village;
+      console.log("City:", city);
+      getWeather(lat, lon, city);
+    })
+    .catch(err => {
+      console.error("Error getting city name:", err);
+    });
+ 
+}
+
+function error(err) {
+  console.error("Error getting location:", err);
+}      
+
+
+
+async function getWeather(lat,lon,city) {
+
+    const apiKey = 'e6bd47544657cbfdc696ff0731623a7d';
+  const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  const forecastUrl= `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+
+
+  const currentRes = await fetch(currentUrl);
+  const currentData = await currentRes.json();
+
+  const forecastRes = await fetch(forecastUrl);
+  const forecastData = await forecastRes.json();
+
+  cont1.innerHTML=`<p>Weather in city: ${city}</p><p>Description: ${currentData.weather[0].description}</p> <p>Temperature:${currentData.main.temp}°C</p><p>humidity:${currentData.main.humidity}</p>
+  <p>wind: ${currentData.wind.speed}m/s</p><p> Date:${new Date()}</p>`;
+  bo1.innerHTML=`<h1>${forecastData.list[6].dt_txt}</h1><p>Description:${forecastData.list[6].weather[0].description}</p><p>Temp:${forecastData.list[6].main.temp}°C</p><p>wind:${forecastData.list[6].wind.speed}m/s</p><p>humidity:${forecastData.list[6].clouds.all}</p>`;
+  bo2.innerHTML=`<h1>${forecastData.list[14].dt_txt}</h1><p>Description:${forecastData.list[14].weather[0].description}</p><p>Temp:${forecastData.list[14].main.temp}°C</p><p>wind:${forecastData.list[14].wind.speed}m/s</p><p>humidity:${forecastData.list[14].clouds.all}</p>`;
+  bo3.innerHTML=`<h1>${forecastData.list[22].dt_txt}</h1><p>Description:${forecastData.list[22].weather[0].description}</p><p>Temp:${forecastData.list[22].main.temp}°C</p><p>wind:${forecastData.list[22].wind.speed}m/s</p><p>humidity:${forecastData.list[22].clouds.all}</p>`;
+  bo4.innerHTML=`<h1>${forecastData.list[30].dt_txt}</h1><p>Description:${forecastData.list[30].weather[0].description}</p><p>Temp:${forecastData.list[30].main.temp}°C</p><p>wind:${forecastData.list[30].wind.speed}m/s</p><p>humidity:${forecastData.list[30].clouds.all}</p>`;
+  bo5.innerHTML=`<h1>${forecastData.list[38].dt_txt}</h1><p>Description:${forecastData.list[38].weather[0].description}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>wind:${forecastData.list[38].wind.speed}m/s</p><p>humidity:${forecastData.list[38].clouds.all}</p>`;
+ 
+  
+}
+
+
+}
+</script>
+</body>
+</html>
