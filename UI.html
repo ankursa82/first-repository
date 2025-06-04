@@ -6,6 +6,7 @@
     <title>Document</title>
     <link rel = "stylesheet" type="text/css" href="UI.css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://kit.fontawesome.com/60e3e7a6d1.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="relative top-20">
@@ -54,17 +55,31 @@ async function getWeather(city) {
   const forecastRes = await fetch(forecastUrl);
   const forecastData = await forecastRes.json();
  
-  cont1.innerHTML=`<p>Weather in city: ${city}</p><p>Description: ${currentData.weather[0].description}</p> <p>Temperature:${currentData.main.temp}°C</p><p>humidity:${currentData.main.humidity}</p>
+  cont1.innerHTML=`<p><b>Weather in city: ${city}</b></p>Description:
+  ${currentData.weather[0].description},${currentData.weather[0].description === 'light rain'
+    ? '<i class="cloud fa-solid fa-cloud-showers-heavy"></i>'
+    :currentData.weather[0].description ==='clear sky'?'': '<i class="cloud fa-solid fa-cloud"></i>'}
+ <p>Temperature:${currentData.main.temp}°C</p><p>humidity:${currentData.main.humidity}</p>
   <p>wind: ${currentData.wind.speed}m/s</p><p> Date:${new Date()}</p>`;
-  bo1.innerHTML=`<h1>${forecastData.list[6].dt_txt}</h1><p>Description:${forecastData.list[6].weather[0].description}</p><p>Temp:${forecastData.list[6].main.temp}°C</p><p>wind:${forecastData.list[6].wind.speed}m/s</p><p>humidity:${forecastData.list[6].clouds.all}</p>`;
-  bo2.innerHTML=`<h1>${forecastData.list[14].dt_txt}</h1><p>Description:${forecastData.list[14].weather[0].description}</p><p>Temp:${forecastData.list[14].main.temp}°C</p><p>wind:${forecastData.list[14].wind.speed}m/s</p><p>humidity:${forecastData.list[14].clouds.all}</p>`;
-  bo3.innerHTML=`<h1>${forecastData.list[22].dt_txt}</h1><p>Description:${forecastData.list[22].weather[0].description}</p><p>Temp:${forecastData.list[22].main.temp}°C</p><p>wind:${forecastData.list[22].wind.speed}m/s</p><p>humidity:${forecastData.list[22].clouds.all}</p>`;
-  bo4.innerHTML=`<h1>${forecastData.list[30].dt_txt}</h1><p>Description:${forecastData.list[30].weather[0].description}</p><p>Temp:${forecastData.list[30].main.temp}°C</p><p>wind:${forecastData.list[30].wind.speed}m/s</p><p>humidity:${forecastData.list[30].clouds.all}</p>`;
-  bo5.innerHTML=`<h1>${forecastData.list[38].dt_txt}</h1><p>Description:${forecastData.list[38].weather[0].description}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>wind:${forecastData.list[38].wind.speed}m/s</p><p>humidity:${forecastData.list[38].clouds.all}</p>`;
+  bo1.innerHTML=`<h1>${forecastData.list[6].dt_txt}</h1><p>Description:${forecastData.list[6].weather[0].description},${forecastData.list[6].weather[0].description === 'light rain'
+    ? '<i class=" fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[6].weather[0].description ==='clear sky'?''
+    : '<i class=" fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[6].main.temp}°C</p><p>humidity:${forecastData.list[6].clouds.all}</p><p>wind:${forecastData.list[6].wind.speed}m/s</p>`;
+  bo2.innerHTML=`<h1>${forecastData.list[14].dt_txt}</h1><p>Description:${forecastData.list[14].weather[0].description},${forecastData.list[14].weather[0].description === 'light rain'
+    ? '<i class=" fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[14].weather[0].description ==='clear sky'?''
+    : '<i class=" fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[14].main.temp}°C</p><p>humidity:${forecastData.list[14].clouds.all}</p><p>wind:${forecastData.list[14].wind.speed}m/s</p>`;
+  bo3.innerHTML=`<h1>${forecastData.list[22].dt_txt}</h1><p>Description:${forecastData.list[22].weather[0].description},${forecastData.list[22].weather[0].description === 'light rain'
+    ? '<i class=" fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[22].weather[0].description ==='clear sky'?''
+    : '<i class=" fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[22].main.temp}°C</p><p>humidity:${forecastData.list[22].clouds.all}</p><p>wind:${forecastData.list[22].wind.speed}m/s</p>`;
+  bo4.innerHTML=`<h1>${forecastData.list[30].dt_txt}</h1><p>Description:${forecastData.list[30].weather[0].description},${forecastData.list[30].weather[0].description === 'light rain'
+    ? '<i class=" fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[30].weather[0].description ==='clear sky'?''
+    : '<i class=" fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[30].main.temp}°C</p><p>humidity:${forecastData.list[30].clouds.all}</p><p>wind:${forecastData.list[30].wind.speed}m/s</p>`;
+  bo5.innerHTML=`<h1>${forecastData.list[38].dt_txt}</h1><p>Description:${forecastData.list[38].weather[0].description},${forecastData.list[38].weather[0].description === 'light rain'
+    ? '<i class=" fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[38].weather[0].description ==='clear sky'?''
+    : '<i class=" fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>humidity:${forecastData.list[38].clouds.all}</p><p>wind:${forecastData.list[38].wind.speed}m/s</p>`;
   
 }
-
 getWeather(city);
+Place.value='';
 }
 const handleClick2=()=>{
 navigator.geolocation.getCurrentPosition(success, error);
@@ -107,13 +122,27 @@ async function getWeather(lat,lon,city) {
   const forecastRes = await fetch(forecastUrl);
   const forecastData = await forecastRes.json();
 
-  cont1.innerHTML=`<p>Weather in city: ${city}</p><p>Description: ${currentData.weather[0].description}</p> <p>Temperature:${currentData.main.temp}°C</p><p>humidity:${currentData.main.humidity}</p>
+  cont1.innerHTML=`<p><b>Weather in city: ${city}</b></p>Description:
+  ${currentData.weather[0].description},${currentData.weather[0].description === 'light rain'
+    ? '<i class="cloud fa-solid fa-cloud-showers-heavy"></i>':currentData.weather[0].description ==='clear sky'?''
+    : '<i class="cloud fa-solid fa-cloud"></i>'}
+ <p>Temperature:${currentData.main.temp}°C</p><p>humidity:${currentData.main.humidity}</p>
   <p>wind: ${currentData.wind.speed}m/s</p><p> Date:${new Date()}</p>`;
-  bo1.innerHTML=`<h1>${forecastData.list[6].dt_txt}</h1><p>Description:${forecastData.list[6].weather[0].description}</p><p>Temp:${forecastData.list[6].main.temp}°C</p><p>wind:${forecastData.list[6].wind.speed}m/s</p><p>humidity:${forecastData.list[6].clouds.all}</p>`;
-  bo2.innerHTML=`<h1>${forecastData.list[14].dt_txt}</h1><p>Description:${forecastData.list[14].weather[0].description}</p><p>Temp:${forecastData.list[14].main.temp}°C</p><p>wind:${forecastData.list[14].wind.speed}m/s</p><p>humidity:${forecastData.list[14].clouds.all}</p>`;
-  bo3.innerHTML=`<h1>${forecastData.list[22].dt_txt}</h1><p>Description:${forecastData.list[22].weather[0].description}</p><p>Temp:${forecastData.list[22].main.temp}°C</p><p>wind:${forecastData.list[22].wind.speed}m/s</p><p>humidity:${forecastData.list[22].clouds.all}</p>`;
-  bo4.innerHTML=`<h1>${forecastData.list[30].dt_txt}</h1><p>Description:${forecastData.list[30].weather[0].description}</p><p>Temp:${forecastData.list[30].main.temp}°C</p><p>wind:${forecastData.list[30].wind.speed}m/s</p><p>humidity:${forecastData.list[30].clouds.all}</p>`;
-  bo5.innerHTML=`<h1>${forecastData.list[38].dt_txt}</h1><p>Description:${forecastData.list[38].weather[0].description}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>wind:${forecastData.list[38].wind.speed}m/s</p><p>humidity:${forecastData.list[38].clouds.all}</p>`;
+  bo1.innerHTML=`<h1>${forecastData.list[6].dt_txt}</h1><p>Description:${forecastData.list[6].weather[0].description},${forecastData.list[6].weather[0].description === 'light rain'
+    ? '<i class="fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[6].weather[0].description ==='clear sky'?''
+    : '<i class="fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[6].main.temp}°C</p><p>humidity:${forecastData.list[6].clouds.all}</p><p>wind:${forecastData.list[6].wind.speed}m/s</p>`;
+  bo2.innerHTML=`<h1>${forecastData.list[14].dt_txt}</h1><p>Description:${forecastData.list[14].weather[0].description},${forecastData.list[14].weather[0].description === 'light rain'
+    ? '<i class="fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[14].weather[0].description ==='clear sky'?''
+    : '<i class="fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[14].main.temp}°C</p><p>humidity:${forecastData.list[14].clouds.all}</p><p>wind:${forecastData.list[14].wind.speed}m/s</p>`;
+  bo3.innerHTML=`<h1>${forecastData.list[22].dt_txt}</h1><p>Description:${forecastData.list[22].weather[0].description},${forecastData.list[22].weather[0].description === 'light rain'
+    ? '<i class="fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[22].weather[0].description ==='clear sky'?''
+    : '<i class="fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[22].main.temp}°C</p><p>humidity:${forecastData.list[22].clouds.all}</p><p>wind:${forecastData.list[22].wind.speed}m/s</p>`;
+  bo4.innerHTML=`<h1>${forecastData.list[30].dt_txt}</h1><p>Description:${forecastData.list[30].weather[0].description},${forecastData.list[30].weather[0].description === 'light rain'
+    ? '<i class="fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[30].weather[0].description ==='clear sky'?''
+    : '<i class="fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[30].main.temp}°C</p><p>humidity:${forecastData.list[30].clouds.all}</p><p>wind:${forecastData.list[30].wind.speed}m/s</p>`;
+  bo5.innerHTML=`<h1>${forecastData.list[38].dt_txt}</h1><p>Description:${forecastData.list[38].weather[0].description},${forecastData.list[38].weather[0].description === 'light rain'
+    ? '<i class="fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[38].weather[0].description ==='clear sky'?''
+    : '<i class="fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>humidity:${forecastData.list[38].clouds.all}</p><p>wind:${forecastData.list[38].wind.speed}m/s</p>`;
  
   
 }
