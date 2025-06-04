@@ -14,8 +14,8 @@
         Weather Dashboard
     </h1>
     <div class="w-72 absolute left-4 ">
-      <label for="place" class="font-bold text-2xl">Enter a City Name:</label><br/>
-      <input type="text" placeholder=" E.g. New York, London, Tokyo " id="places" class="border-2 w-72"><br/><br/>
+      <label for="places" class="font-bold text-2xl">Enter a City Name:</label><br/>
+      <select id="cityDropdown"><input type="text" placeholder=" E.g. New York, London, Tokyo " id="places" class="border-2 w-72"></select><br/>
       <button onclick="handleClick()" class="w-72 border-2 bg-blue-600 text-center rounded-lg">Search</button><br/><br/>
       <hr class="w-72"><p class="text-center">or</p><hr class="w-72"><br/>
       <button onclick="handleClick2()" class="w-72 border-2 bg-gray-400 text-center rounded-lg">Use current location</button>
@@ -33,26 +33,86 @@
     </div>
     </div>
 <script>
+const dropdown = document.getElementById("cityDropdown");
 const cont1= document.querySelector(".container1");
 const bo1=document.querySelector(".box1");
 const bo2=document.querySelector(".box2");
 const bo3=document.querySelector(".box3");
 const bo4=document.querySelector(".box4");
 const bo5=document.querySelector(".box5");
-const handleClick=()=>{
-const Place=document.getElementById("places");        
-const API_KEY = 'e6bd47544657cbfdc696ff0731623a7d';
-const city = Place.value;
 
+// Load cities from localStorage
+let cities = JSON.parse(localStorage.getItem("cities")) || ["Delhi", "Mumbai"];
+updateDropdown();
+
+// Update dropdown list
+function updateDropdown() {
+  dropdown.innerHTML = "";
+  cities.forEach(city => {
+    const option = document.createElement("option");
+    option.value = city;
+    option.textContent = city;
+    dropdown.appendChild(option);
+  });
+  // Load weather of first city on page load
+  getWeather(cities[0]);
+}
+
+async function isValidCity(city) {
+  const API_KEY = 'e6bd47544657cbfdc696ff0731623a7d';
+  const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+
+  try {
+    const response = await fetch(currentUrl);
+    return response.ok; // true if city is valid, false otherwise
+  } catch (error) {
+    return false;
+  }
+}
+
+ async function handleClick(){
+const Place=document.getElementById("places");        
+
+const newCity = Place.value.trim();
+  if (cities.includes(newCity)) {
+    dropdown.value=newCity;
+    getWeather(newCity);
+    Place.value ="";
+    return;
+  }
+
+  const valid = await isValidCity(newCity);
+  if (!valid ) {
+    alert("Invalid city name. Please try again.");
+    Place.value="";
+    return;
+  }
+    cities.push(newCity);
+    localStorage.setItem("cities", JSON.stringify(cities));
+    updateDropdown();
+    dropdown.value = newCity;   
+  getWeather(newCity);
+  Place.value = "";
+}
+
+// When dropdown value changes
+dropdown.addEventListener("change", () => {
+  const selectedCity = dropdown.value;
+  getWeather(selectedCity);
+});
 
 async function getWeather(city) {
+  console.log("Fetching weather for:", city);
+  const API_KEY = 'e6bd47544657cbfdc696ff0731623a7d';
   const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
   const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`;
 
   const currentRes = await fetch(currentUrl);
+  if (!currentRes.ok){alert("City not found");cities.shift(city);}
   const currentData = await currentRes.json();
 
   const forecastRes = await fetch(forecastUrl);
+  if (!forecastRes.ok) throw new Error("City not found");
   const forecastData = await forecastRes.json();
  
   cont1.innerHTML=`<p><b>Weather in city: ${city}</b></p>Description:
@@ -78,9 +138,7 @@ async function getWeather(city) {
     : '<i class=" fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>humidity:${forecastData.list[38].clouds.all}</p><p>wind:${forecastData.list[38].wind.speed}m/s</p>`;
   
 }
-getWeather(city);
-Place.value='';
-}
+
 const handleClick2=()=>{
 navigator.geolocation.getCurrentPosition(success, error);
 
@@ -143,11 +201,8 @@ async function getWeather(lat,lon,city) {
   bo5.innerHTML=`<h1>${forecastData.list[38].dt_txt}</h1><p>Description:${forecastData.list[38].weather[0].description},${forecastData.list[38].weather[0].description === 'light rain'
     ? '<i class="fa-solid fa-cloud-showers-heavy"></i>':forecastData.list[38].weather[0].description ==='clear sky'?''
     : '<i class="fa-solid fa-cloud"></i>'}</p><p>Temp:${forecastData.list[38].main.temp}°C</p><p>humidity:${forecastData.list[38].clouds.all}</p><p>wind:${forecastData.list[38].wind.speed}m/s</p>`;
- 
   
 }
-
-
 }
 </script>
 </body>
